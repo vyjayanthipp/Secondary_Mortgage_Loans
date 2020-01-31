@@ -47,30 +47,31 @@ def read_csv(acq_perf='Acquisition'):
             "interest_rate",  # CURRENT INTEREST RATE
             "balance",  # CURRENT BALANCE
             "loan_age",
-            "months_to_maturity",
+            "months_to_maturity", # REMAINING MONTHS TO LEGAL MATURITY
+            "adj_months_to_maturity", # ADJUSTED MONTHS TO MATURITY
             "maturity_date",
             "msa",  # METROPOLITAN STATISTICAL AREA
-            "delinquency_status",
-            "modification_flag",
-            "zero_balance_code",
-            "zero_balance_date",
-            "last_paid_installment_date",
-            "foreclosure_date",
-            "disposition_date",
-            "foreclosure_costs",
-            "property_repair_costs",
-            "recovery_costs",
-            "misc_costs",
-            "tax_costs",
-            "sale_proceeds",
-            "credit_enhancement_proceeds",
-            "repurchase_proceeds",
+            "delinquency_status", # CURRENT LOAN DELINQUENCY STATUS
+            "modification_flag",  # MODIFICATION FLAG
+            "zero_balance_code", # ZERO BALANCE CODE
+            "zero_balance_date", # ZERO BALANCE EFFECTIVE DATE
+            "last_paid_installment_date",  # LAST PAID INSTALLMENT DATE
+            "foreclosure_date", # FORECLOSURE DATE
+            "disposition_date", # DISPOSITION DATE
+            "foreclosure_costs", # FORECLOSURE COSTS
+            "property_repair_costs", # PROPERTY PRESERVATION AND REPAIR COSTS
+            "recovery_costs", # ASSET RECOVERY COSTS
+            "misc_costs", # MISCELLANEOUS HOLDING EXPENSES AND CREDITS
+            "tax_costs", # ASSOCIATED TAXES FOR HOLDING PROPERTY
+            "sale_proceeds", # NET SALE PROCEEDS
+            "credit_enhancement_proceeds", # CREDIT ENHANCEMENT PROCEEDS
+            "repurchase_proceeds", # REPURCHASE MAKE WHOLE PROCEEDS
             "other_foreclosure_proceeds",
             "non_interest_bearing_balance",
             "principal_forgiveness_balance",
             "make_whole_flag",  # REPURCHASE MAKE WHOLE PROCEEDS FLAG
             "foreclosure_writeoff",  # FORECLOSURE PRINCIPAL WRITE-OFF AMOUNT
-            "activity_flag",  # SERVICING ACTIVITY INDICATOR
+            "activity_flag" # SERVICING ACTIVITY INDICATOR
             ]
         }
 
@@ -78,4 +79,5 @@ def read_csv(acq_perf='Acquisition'):
     for q in range(1, 5):  # For the 4 Quarters of 2018
         df.append(pd.read_csv(f'{acq_perf}_2018Q{q}.txt', sep='|', names=HEADERS[acq_perf],
                               low_memory=False))
+
     return pd.concat(df, axis=0, ignore_index=True)
