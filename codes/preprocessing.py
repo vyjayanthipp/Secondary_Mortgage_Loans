@@ -1,4 +1,5 @@
 import pandas as pd
+import sqlite3
 
 
 def read_csv(acq_perf='Acquisition'):
@@ -6,12 +7,13 @@ def read_csv(acq_perf='Acquisition'):
     Args:
         acq_perf (str):  'Acquisition' or 'Performance' CSV files to read
 
-        Note - Please download the data from https://www.fanniemae.com/portal/funding-the-market/data/loan-performance-data.html
-                    Then unzip individual files and move them into a 'data' folder to use this function.
+        Note - Please download the data from
+            https://www.fanniemae.com/portal/funding-the-market/data/loan-performance-data.html
+            Then unzip individual files and move them into a 'data' folder to use this function.
     Returns:
         Pandas DataFrame from either 'Acquisition' or 'Performance' CSV file
     """
-    # Column Names and descriptions (in comments)
+    # Column names and descriptions (in comments) because there's no header in the "*.txt"
     HEADERS = {
         "Acquisition": [
             "id",  # LOAN IDENTIFIER
@@ -33,7 +35,7 @@ def read_csv(acq_perf='Acquisition'):
             "unit_count",  # NUMBER OF UNIT
             "occupancy_type",  # OCCUPANCY TYPE
             "property_state",  # PROPERTY STATE
-            "zip",  # ZIPCODE
+            "zip",  # ZIPCODE SHORT (FIRST 3 DIGITS)
             "insurance_percentage",  # PRIMARY MORTGAGE INSURANCE PERCENT
             "product_type",  # PRODUCT TYPE
             "coborrower_score",  # CO-BORROWER CREDIT SCORE
@@ -75,9 +77,45 @@ def read_csv(acq_perf='Acquisition'):
             ]
         }
 
+    exclude_cols = [
+        "first_payment_date",
+        "zip",  # only 3 digit codes in Acquisition and possible errors in input as there are 1 and 2 digit codes,
+        # more useful with 'msa' in Performance
+        "credit_enhancement_proceeds",
+        "other_foreclosure_proceeds",
+        "non_interest_bearing_balance",
+        "principal_forgiveness_balance",
+        "make_whole_flag"
+        "activity_flag"
+        ]
+
+    use_idx = [i for i, col in enumerate(HEADERS[acq_perf]) if col not in exclude_cols]
+
     df = []
     for q in range(1, 5):  # For the 4 Quarters of 2018
-        df.append(pd.read_csv(f'{acq_perf}_2018Q{q}.txt', sep='|', names=HEADERS[acq_perf],
+        df.append(pd.read_csv(f'{acq_perf}_2018Q{q}.txt', sep='|',
+                              names=HEADERS[acq_perf], usecols=use_idx,
                               low_memory=False))
 
     return pd.concat(df, axis=0, ignore_index=True)
+
+
+def create_sqlite_db(df, tablename='Untitled', conn=None):
+    """
+    Args:
+        df (pandas.DataFrame):  DataFrame to add as table
+        tablename (str): Table name to set in the SQLite Database
+        conn (sqlite3.connect): SQLite connection, if None create a connection
+
+    """
+    if conn is None:
+        conn = sqlite3.connect('Secondary_Mortgage_Loans.db')
+
+    df.to_sql(tablename, con=conn)
+
+
+def preprocess(df):
+    # create a new feature with loans up to the point of either being delinquent or Dec 2018/2019
+    #
+
+    pass
