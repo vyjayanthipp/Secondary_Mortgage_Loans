@@ -59,6 +59,7 @@ def read_csv(acq_perf='Acquisition'):
             "zero_balance_date",  # ZERO BALANCE EFFECTIVE DATE
             "last_paid_installment_date",  # LAST PAID INSTALLMENT DATE
             "foreclosure_date",  # FORECLOSURE DATE
+
             "disposition_date",  # DISPOSITION DATE
             "foreclosure_costs",  # FORECLOSURE COSTS
             "property_repair_costs",  # PROPERTY PRESERVATION AND REPAIR COSTS
@@ -79,19 +80,14 @@ def read_csv(acq_perf='Acquisition'):
 
     exclude_cols = [
         "first_payment_date",
+        "servicer_name",  # from Performance also in Acquisition as Seller
         "zip",  # only 3 digit codes in Acquisition and possible errors in input as there are 1 and 2 digit codes,
         # more useful with 'msa' in Performance
-        "credit_enhancement_proceeds",
-        "other_foreclosure_proceeds",
-        "non_interest_bearing_balance",
-        "principal_forgiveness_balance",
-        "tax_costs",  # there's only a few (20) rows with values for tax_costs
-        "make_whole_flag"
-        "activity_flag"
         ]
 
     use_idx = [i for i, col in enumerate(HEADERS[acq_perf]) if col not in exclude_cols]
-
+    if acq_perf == "Performance":
+        use_idx = use_idx[:-15]
     df = []
     for q in range(1, 5):  # For the 4 Quarters of 2018
         df.append(pd.read_csv(f'{acq_perf}_2018Q{q}.txt', sep='|',
@@ -118,6 +114,7 @@ def create_sqlite_db(df, tablename='Untitled', conn=None):
 def preprocess(df):
     # create a new feature with loans up to the point of either being delinquent or Dec 2018/2019
     #
-    
+
     pass
 
+# read_csv("Performance")
