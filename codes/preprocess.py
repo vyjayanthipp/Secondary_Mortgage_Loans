@@ -49,31 +49,31 @@ def read_csv(acq_perf='Acquisition'):
             "interest_rate",  # CURRENT INTEREST RATE
             "balance",  # CURRENT BALANCE
             "loan_age",
-            "months_to_maturity", # REMAINING MONTHS TO LEGAL MATURITY
-            "adj_months_to_maturity", # ADJUSTED MONTHS TO MATURITY
+            "months_to_maturity",  # REMAINING MONTHS TO LEGAL MATURITY
+            "adj_months_to_maturity",  # ADJUSTED MONTHS TO MATURITY
             "maturity_date",
             "msa",  # METROPOLITAN STATISTICAL AREA
-            "delinquency_status", # CURRENT LOAN DELINQUENCY STATUS
+            "delinquency_status",  # CURRENT LOAN DELINQUENCY STATUS
             "modification_flag",  # MODIFICATION FLAG
-            "zero_balance_code", # ZERO BALANCE CODE
-            "zero_balance_date", # ZERO BALANCE EFFECTIVE DATE
+            "zero_balance_code",  # ZERO BALANCE CODE
+            "zero_balance_date",  # ZERO BALANCE EFFECTIVE DATE
             "last_paid_installment_date",  # LAST PAID INSTALLMENT DATE
-            "foreclosure_date", # FORECLOSURE DATE
-            "disposition_date", # DISPOSITION DATE
-            "foreclosure_costs", # FORECLOSURE COSTS
-            "property_repair_costs", # PROPERTY PRESERVATION AND REPAIR COSTS
-            "recovery_costs", # ASSET RECOVERY COSTS
-            "misc_costs", # MISCELLANEOUS HOLDING EXPENSES AND CREDITS
-            "tax_costs", # ASSOCIATED TAXES FOR HOLDING PROPERTY
-            "sale_proceeds", # NET SALE PROCEEDS
-            "credit_enhancement_proceeds", # CREDIT ENHANCEMENT PROCEEDS
-            "repurchase_proceeds", # REPURCHASE MAKE WHOLE PROCEEDS
+            "foreclosure_date",  # FORECLOSURE DATE
+            "disposition_date",  # DISPOSITION DATE
+            "foreclosure_costs",  # FORECLOSURE COSTS
+            "property_repair_costs",  # PROPERTY PRESERVATION AND REPAIR COSTS
+            "recovery_costs",  # ASSET RECOVERY COSTS
+            "misc_costs",  # MISCELLANEOUS HOLDING EXPENSES AND CREDITS
+            "tax_costs",  # ASSOCIATED TAXES FOR HOLDING PROPERTY
+            "sale_proceeds",  # NET SALE PROCEEDS
+            "credit_enhancement_proceeds",  # CREDIT ENHANCEMENT PROCEEDS
+            "repurchase_proceeds",  # REPURCHASE MAKE WHOLE PROCEEDS
             "other_foreclosure_proceeds",
             "non_interest_bearing_balance",
             "principal_forgiveness_balance",
             "make_whole_flag",  # REPURCHASE MAKE WHOLE PROCEEDS FLAG
             "foreclosure_writeoff",  # FORECLOSURE PRINCIPAL WRITE-OFF AMOUNT
-            "activity_flag" # SERVICING ACTIVITY INDICATOR
+            "activity_flag"  # SERVICING ACTIVITY INDICATOR
             ]
         }
 
@@ -85,6 +85,7 @@ def read_csv(acq_perf='Acquisition'):
         "other_foreclosure_proceeds",
         "non_interest_bearing_balance",
         "principal_forgiveness_balance",
+        "tax_costs",  # there's only a few (20) rows with values for tax_costs
         "make_whole_flag"
         "activity_flag"
         ]
@@ -117,5 +118,5 @@ def create_sqlite_db(df, tablename='Untitled', conn=None):
 def preprocess(df):
     # create a new feature with loans up to the point of either being delinquent or Dec 2018/2019
     #
-
+    
     pass
