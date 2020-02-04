@@ -135,7 +135,7 @@ def preprocess(acquisition_df=None, performance_df=None):
     # Drop State Codes with 'PR','GU', and 'VI' from both Acquisition and Performance.
     acq_cols = ['id', 'org_balance', 'interest_rate', 'ltv', 'borrower_count', 'score', 'loan_purpose', 'dti',
                                      'occupancy_type', 'property_type']
-    perf_cols = ['id','upc_balance', 'loan_age', 'months_to_maturity','payment_amounts']
+    perf_cols = ['id','upc_balance', 'loan_age', 'months_to_maturity','payment_amounts','delinquency_bool']
     acquisition_df.property_state = acquisition_df.property_state.where(
         ~acquisition_df.property_state.isin(['PR', 'GU', 'VI']))
     acquisition_df = acquisition_df.dropna(subset=['property_state'])
@@ -179,7 +179,7 @@ def preprocess(acquisition_df=None, performance_df=None):
 
     data = pd.concat([before_deliq_rows, current_loans], sort=False, ignore_index=True)
 
-    data = data[performance_df] # drop columns with all NaNs
+    data = data[perf_cols]  # drop columns with all NaNs
     data = data.dropna(axis=0, subset=['payment_amounts'])
 
     data2 = pd.merge(acquisition_df, data, on='id')
