@@ -180,8 +180,8 @@ def preprocess(acquisition_df=None, performance_df=None):
     # data2.to_csv('cleaned_data.csv.zip')
     # split test_train
     train, test = train_test_split(data2, test_size=0.33, stratify=data2.delinquency_bool, random_state=2020)
-    train.to_csv('cleaned_train_data.csv.zip')
-    test.to_csv('cleaned_test_data.csv.zip')
+    train.to_csv('cleaned_train_data.csv.zip', index=False)
+    test.to_csv('cleaned_test_data.csv.zip', index=False)
 
 
 def load_clean_data(file):
@@ -197,7 +197,7 @@ def load_clean_data(file):
         y (pandas.Series):
 
     """
-    df = pd.read_csv(f'cleaned_{file}_data.csv.zip')
-    X = df.drop('delinquency_bool')
+    df = pd.read_csv(f'data/cleaned_{file}_data.csv.zip')
+    X = df.drop(columns=['delinquency_bool'])
     y = df.delinquency_bool
     return X, y

@@ -5,23 +5,44 @@ from sklearn.decomposition import PCA
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier
+from .preprocess import load_clean_data
 
 
-def split_train_test(df):
-    X = df.drop(columns=['delinquency_status'])
-    y = df.PRELEVER
-    return train_test_split(X, y, test_size=0.2, stratify=y, random_state=2020)
+class DelinquentClassifier:
+    """
+    Build and train a
+    """
 
+    def __init__(self, X_train, y_train):
+        """
 
-class DelinquencyClassifier:
-    def __init__(self, df, pipe=None):
-        self.X_train, self.X_test, self.y_train, self.y_test = split_train_test(df)
-        self.pipe = pipe
+        Args:
+            X_train: Features training data
+            y_train: Target training data
+            pipe: default is None, then will build a generic Pipeline
+        """
+        self.X_train, self.y_train = X_train, y_train  # initialize by passing in training data
+        self.pipe = Pipeline()
+    def build_pipeline(self, steps):
+        """
+        Build a pipeline.
 
-    def build_pipeline(self, steps=None):
-        self.pipe = Pipeline(steps)
+        Args:
+            steps (sklearn.pipeline.Pipeline): if None, build a default Pipeline [StandardScaler, OneHotEncoder,
+            LogisticRegression]
+
+        Returns:
+
+        """
+        if steps is None:
+            steps = dict(
+                std_sc=StandardScaler(),
+                dummies=OneHotEncoder(),
+                estm=LogisticRegression()
+                )
+        self.pipe = Pipeline(steps=list(steps.items()))
+        return self
 
     def tune_hyperparam(self):
-        # do RandomSearchCV
-        # then GridSearchCV
-        pass
+        # do RandomSearchCV just have wide range and a lot of iterations
+        return self
