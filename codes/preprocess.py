@@ -5,12 +5,11 @@ from sklearn.model_selection import train_test_split
 
 def read_csv(acq_perf='Acquisition'):
     """
+    Note - Please download the data from https://www.fanniemae.com/portal/funding-the-market/data/loan-performance-data.html
+    Then unzip individual files and move them into a 'data' folder to use this function.
     Args:
         acq_perf (str):  'Acquisition' or 'Performance' CSV files to read
 
-        Note - Please download the data from
-            https://www.fanniemae.com/portal/funding-the-market/data/loan-performance-data.html
-            Then unzip individual files and move them into a 'data' folder to use this function.
     Returns:
         Pandas DataFrame from either 'Acquisition' or 'Performance' CSV file
     """
@@ -183,3 +182,22 @@ def preprocess(acquisition_df=None, performance_df=None):
     train, test = train_test_split(data2, test_size=0.33, stratify=data2.delinquency_bool, random_state=2020)
     train.to_csv('cleaned_train_data.csv.zip')
     test.to_csv('cleaned_test_data.csv.zip')
+
+
+def load_clean_data(file):
+    """
+    Loads cleaned data zipped csv files  "cleaned_test_data.csv.zip" or "cleaned_train_data.csv.zip"
+    Returns as X (features) or y (targets).
+
+    Args:
+        file(str): str of "test" or "train"
+
+    Returns:
+        X (pandas.DataFrame):
+        y (pandas.Series):
+
+    """
+    df = pd.read_csv(f'cleaned_{file}_data.csv.zip')
+    X = df.drop('delinquency_bool')
+    y = df.delinquency_bool
+    return X, y
