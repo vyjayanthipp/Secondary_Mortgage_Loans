@@ -205,6 +205,6 @@ def load_clean_data(file):
 
     """
     df = pd.read_csv(os.path.join(module_path, f'data/cleaned_{file}_data.csv.zip'))
-    X = df.drop(columns=['delinquency_bool'])
+    X = df.drop(columns=['id', 'delinquency_bool'])
     y = df.delinquency_bool
     return X, y
