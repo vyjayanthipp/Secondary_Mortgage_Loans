@@ -1,7 +1,10 @@
 import pandas as pd
 import sqlite3
 from sklearn.model_selection import train_test_split
+import os
 
+module_path = os.path.abspath(os.path.join('..'))  # assumed the Parent Directory is the highest level of the
+# project folder ("Secondary_Mortgage_Loans"
 
 def read_csv(acq_perf='Acquisition'):
     """
@@ -13,6 +16,7 @@ def read_csv(acq_perf='Acquisition'):
     Returns:
         Pandas DataFrame from either 'Acquisition' or 'Performance' CSV file
     """
+
     # Column names and descriptions (in comments) because there's no header in the "*.txt"
     HEADERS = {
         "Acquisition": [
@@ -93,7 +97,7 @@ def read_csv(acq_perf='Acquisition'):
 
     df = []
     for q in range(1, 5):  # For the 4 Quarters of 2018
-        df.append(pd.read_csv(f'{acq_perf}_2018Q{q}.txt', sep='|',
+        df.append(pd.read_csv(os.path.join(module_path, f'data/{acq_perf}_2018Q{q}.txt'), sep='|',
                               names=HEADERS[acq_perf], usecols=use_idx,
                               low_memory=False))
 
@@ -129,13 +133,14 @@ def preprocess(acquisition_df=None, performance_df=None):
         performance_df = read_csv('Performance')
 
     # Drop State Codes with 'PR','GU', and 'VI' from both Acquisition and Performance.
-    acq_cols = ['id', 'org_balance', 'interest_rate', 'ltv', 'score', 'loan_purpose', 'dti',
+    acq_cols = ['id', 'org_balance', 'interest_rate', 'ltv', 'borrower_count', 'score', 'loan_purpose', 'dti',
                                      'occupancy_type', 'property_type']
+    perf_cols = ['id','upc_balance', 'loan_age', 'months_to_maturity','payment_amounts']
     acquisition_df.property_state = acquisition_df.property_state.where(
         ~acquisition_df.property_state.isin(['PR', 'GU', 'VI']))
     acquisition_df = acquisition_df.dropna(subset=['property_state'])
     acquisition_df['score'] = acquisition_df[['borrower_score', 'coborrower_score']].mean(axis=1)
-    acquisition_df = acquisition_df[acq_cols]
+    acquisition_df = acquisition_df[acq_cols].dropna(axis=0, subset=['score', 'dti'])
 
     performance_df.drop(columns='interest_rate')
     performance_df.id = performance_df.id.where(performance_df.id.isin(acquisition_df.id))
@@ -174,14 +179,16 @@ def preprocess(acquisition_df=None, performance_df=None):
 
     data = pd.concat([before_deliq_rows, current_loans], sort=False, ignore_index=True)
 
-    data = data.dropna(axis=1,how='all') # drop columns with all NaNs
+    data = data[performance_df] # drop columns with all NaNs
+    data = data.dropna(axis=0, subset=['payment_amounts'])
 
     data2 = pd.merge(acquisition_df, data, on='id')
+
     # data2.to_csv('cleaned_data.csv.zip')
     # split test_train
     train, test = train_test_split(data2, test_size=0.33, stratify=data2.delinquency_bool, random_state=2020)
-    train.to_csv('cleaned_train_data.csv.zip', index=False)
-    test.to_csv('cleaned_test_data.csv.zip', index=False)
+    train.to_csv(os.path.join(module_path, 'data/cleaned_train_data.csv.zip'), index=False)
+    test.to_csv(os.path.join(module_path, 'data/cleaned_test_data.csv.zip'), index=False)
 
 
 def load_clean_data(file):
@@ -197,7 +204,7 @@ def load_clean_data(file):
         y (pandas.Series):
 
     """
-    df = pd.read_csv(f'data/cleaned_{file}_data.csv.zip')
+    df = pd.read_csv(os.path.join(module_path, f'data/cleaned_{file}_data.csv.zip'))
     X = df.drop(columns=['delinquency_bool'])
     y = df.delinquency_bool
     return X, y
