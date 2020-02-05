@@ -130,3 +130,12 @@ dmypy.json
 
 # SQLite Database (File too large)
 .db
+data/Acquisition_2018Q1.txt
+data/Acquisition_2018Q4.txt
+data/Performance_2018Q1.txt
+data/Performance_2018Q2.txt
+data/Performance_2018Q3.txt
+data/Performance_2018Q4.txt
+data/Secondary_Mortgage_Loans.db
+data/Acquisition_2018Q2.txt
+data/Acquisition_2018Q3.txt
