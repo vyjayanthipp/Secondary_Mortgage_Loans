@@ -8,8 +8,8 @@ Goal of this project is to predict whether or not mortgages will become delinque
 - [Jeff Lin](https://github.com/jleifnf)
 
 ## Summary & Links to Files:
-- [Slide Deck (PDF)](Prediction_Delinquent_Mortgages.pdf) [GoogleSlides](https://docs.google.com/presentation/d/1uLBlBkcN58Wh6j8i7T8jkC171pTvfWp3l93eQ8rdT-A/edit?usp=sharing)
-- [Data](data/)
+- [Slide Deck (PDF)](Prediction_Delinquent_Mortgages.pdf) [(GoogleSlides)](https://docs.google.com/presentation/d/1uLBlBkcN58Wh6j8i7T8jkC171pTvfWp3l93eQ8rdT-A/edit?usp=sharing)
+- [Data Files](data/)  [(Source: Fannie Mae)](https://loanperformancedata.fanniemae.com/lppub/index.html)
 - [Notebooks](README.md)
     - [Technical Notebook](index.ipynb)
     - [Exploratory Data Analysis](codes/)
