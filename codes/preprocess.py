@@ -135,8 +135,8 @@ def preprocess(acquisition_df=None, performance_df=None):
 
     # Drop State Codes with 'PR','GU', and 'VI' from both Acquisition and Performance.
     acq_cols = ['id', 'org_balance', 'interest_rate', 'ltv', 'borrower_count', 'score', 'loan_purpose', 'dti',
-                                     'occupancy_type', 'property_type']
-    perf_cols = ['id','upc_balance', 'loan_age', 'months_to_maturity','payment_amounts','delinquency_bool']
+                'occupancy_type', 'property_type']
+    perf_cols = ['id', 'upc_balance', 'loan_age', 'months_to_maturity', 'payment_amounts', 'delinquency_bool']
     acquisition_df.property_state = acquisition_df.property_state.where(
         ~acquisition_df.property_state.isin(['PR', 'GU', 'VI']))
     acquisition_df = acquisition_df.dropna(subset=['property_state'])
@@ -192,20 +192,37 @@ def preprocess(acquisition_df=None, performance_df=None):
     test.to_csv(os.path.join(module_path, 'data/cleaned_test_data.csv.zip'), index=False)
 
 
-def load_clean_data(file):
+def load_clean_data(file, full=None):
     """
     Loads cleaned data zipped csv files  "cleaned_test_data.csv.zip" or "cleaned_train_data.csv.zip"
     Returns as X (features) or y (targets).
 
     Args:
         file(str): str of "test" or "train"
+        full:
 
     Returns:
         X (pandas.DataFrame):
         y (pandas.Series):
 
     """
-    df = pd.read_csv(os.path.join(module_path, f'data/cleaned_{file}_data.csv.zip'))
-    X = df.drop(columns=['id', 'delinquency_bool'])
-    y = df.delinquency_bool
-    return X, y
+    if full:
+        fn = file
+        if fn.find('__') > 0:
+            fn = fn.replace('__', '_train_')
+            df = pd.read_csv(fn)
+            fn = fn.replace('_train_', '_test_')
+            df = df.append(pd.read_csv(fn),
+                       ignore_index=True, sort=False)
+            return df
+        else:
+            df = pd.read_csv(fn)
+            X = df.drop(columns=['id', 'delinquency_bool'])
+            y = df.delinquency_bool
+            return X, y
+    else:
+        fn = os.path.join(module_path, f'data/cleaned_{file}_data.csv.zip')
+        df = pd.read_csv(fn)
+        X = df.drop(columns=['id', 'delinquency_bool'])
+        y = df.delinquency_bool
+        return X, y
