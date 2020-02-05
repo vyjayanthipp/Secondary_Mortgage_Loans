@@ -6,6 +6,7 @@ import os
 module_path = os.path.abspath(os.path.join('..'))  # assumed the Parent Directory is the highest level of the
 # project folder ("Secondary_Mortgage_Loans"
 
+
 def read_csv(acq_perf='Acquisition'):
     """
     Note - Please download the data from https://www.fanniemae.com/portal/funding-the-market/data/loan-performance-data.html

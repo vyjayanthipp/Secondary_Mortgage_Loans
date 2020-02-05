@@ -13,7 +13,6 @@ from yellowbrick.classifier import ConfusionMatrix
 
 
 def CM(pipe, X, y):
-    print(classification_report(y, pipe.predict(X), target_names=['Current', 'Delinquent']))
     delinq_cm = ConfusionMatrix(pipe,
                                 classes=['Current', 'Delinquent'],
                                 label_encoder={0: 'Current', 1: 'Delinquent'},
@@ -21,6 +20,8 @@ def CM(pipe, X, y):
                                 )
     delinq_cm.score(X, y)
     delinq_cm.show()
+    print(delinq_cm.confusion_matrix_)
+    print(classification_report(y, pipe.predict(X), target_names=['Current', 'Delinquent'], digits=4))
 
 
 def build_transformers(X):
@@ -44,5 +45,3 @@ def build_transformers(X):
             ]
         )
     return preprocessor
-
-
