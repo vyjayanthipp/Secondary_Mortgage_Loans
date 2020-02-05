@@ -8,9 +8,9 @@ Goal of this project is to predict whether or not mortgages will become delinque
 - [Jeff Lin](https://github.com/jleifnf)
 
 ## Summary & Links to Files:
-- [Slide Deck (PDF)](/blob/master/Prediction_Delinquent_Mortgages.pdf)
+- [Slide Deck (PDF)](Prediction_Delinquent_Mortgages.pdf)
 - [Data](data/)
-- [Notebooks]()
+- [Notebooks](README.md)
     - [Technical Notebook](index.ipynb)
     - [Exploratory Data Analysis](codes/)
 - [Python Files](codes/)
